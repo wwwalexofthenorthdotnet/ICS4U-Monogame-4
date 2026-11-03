@@ -13,6 +13,9 @@ namespace ICS4U_Monogame_4
         private SpriteBatch _spriteBatch;
 
         Rectangle window;
+        Rectangle frame;
+
+        Texture2D frameTexture;
 
         Rectangle shipRect;
         Texture2D shipTexture;
@@ -27,7 +30,7 @@ namespace ICS4U_Monogame_4
 
         KeyboardState keyboardState;
 
-        int shipY = 50;
+        int shipY = 250;
 
         public Game1()
         {
@@ -45,10 +48,13 @@ namespace ICS4U_Monogame_4
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
+            frame = new Rectangle(50, 50, 700, 500); 
+
 
             generator = new Random();
 
             stars = new List<Star>();
+
 
             base.Initialize();
             for (int i = 0; i < 150; i++)
@@ -68,6 +74,7 @@ namespace ICS4U_Monogame_4
 
             shipTexture = Content.Load<Texture2D>("images/enterprise");
             starTexture = Content.Load<Texture2D>("images/circle");
+            frameTexture = Content.Load<Texture2D>("images/rectangle");
 
         }
 
@@ -80,22 +87,22 @@ namespace ICS4U_Monogame_4
 
             keyboardState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Up))
+            if (keyboardState.IsKeyDown(Keys.Up) && shipRect.Top != frame.Top)
             {
                 shipY -= 5;
             }
-            else if (keyboardState.IsKeyDown(Keys.Down))
+            else if (keyboardState.IsKeyDown(Keys.Down) && shipRect.Bottom != frame.Bottom)
             {
                 shipY += 5;
 
             }
 
-            shipRect = new Rectangle(50, shipY, 150, 40);
+            shipRect = new Rectangle(200, shipY, 150, 40);
 
 
             foreach (Star star in stars) 
             {
-                star.Update(window);
+                star.Update(window, keyboardState);
             }
 
 
@@ -106,11 +113,17 @@ namespace ICS4U_Monogame_4
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
 
             _spriteBatch.Begin();
+
+            
+
+            _spriteBatch.Draw(frameTexture, frame, Color.Black);
+
+            _spriteBatch.Draw(frameTexture, frame, Color.Purple * 0.1f);
 
             foreach (Star star in stars)
             {
@@ -118,6 +131,10 @@ namespace ICS4U_Monogame_4
             }
 
             _spriteBatch.Draw(shipTexture, shipRect, Color.White);
+
+
+            
+
 
             _spriteBatch.End();
 

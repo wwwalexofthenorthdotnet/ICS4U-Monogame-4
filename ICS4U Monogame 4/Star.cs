@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +26,14 @@ namespace ICS4U_Monogame_4
 
         }
 
-        public Star(Texture2D texture, Rectangle window)
+        public Star(Texture2D texture, Rectangle frame)
         {
             _generator = new Random();
 
             double sizeProbability = _generator.NextDouble();
             int size;
             _texture = texture;
+
             if (sizeProbability < 0.1)
                 size = 3;
             else if (sizeProbability < 0.3)
@@ -40,18 +42,25 @@ namespace ICS4U_Monogame_4
                 size = 1;
 
 
-            _location = new Rectangle(_generator.Next(window.Width), _generator.Next(window.Height), size, size);
+            _location = new Rectangle(_generator.Next(frame.Width), _generator.Next(frame.Height), size, size);
             _speed = new Vector2(-size, 0);    
         }
 
-        public void Update(Rectangle window)
+        public void Update(Rectangle frame, KeyboardState keyboardState)
         {
-            
-            _location.Offset(_speed);
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+                _location.Offset(_speed * 2);
+            }
+            else
+            {
+                _location.Offset(_speed);
+            }
+
             if (_location.X < 0)
             {
-                _location.X = window.Width + 5;
-                _location.Y = _generator.Next(window.Height);
+                _location.X = frame.Width;
+                _location.Y = _generator.Next(frame.Height);
             }
         }
 
