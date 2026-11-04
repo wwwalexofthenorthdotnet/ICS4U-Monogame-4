@@ -22,8 +22,6 @@ namespace ICS4U_Monogame_4
 
         Texture2D starTexture;
 
-        Star star1;
-
         List<Star> stars;
 
         Random generator;
@@ -48,7 +46,7 @@ namespace ICS4U_Monogame_4
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
-            frame = new Rectangle(50, 50, 700, 500); 
+            frame = new Rectangle(0, 0, window.Width, window.Height); 
 
 
             generator = new Random();
@@ -74,7 +72,7 @@ namespace ICS4U_Monogame_4
 
             shipTexture = Content.Load<Texture2D>("images/enterprise");
             starTexture = Content.Load<Texture2D>("images/circle");
-            frameTexture = Content.Load<Texture2D>("images/rectangle");
+            frameTexture = Content.Load<Texture2D>("images/frame");
 
         }
 
@@ -113,24 +111,21 @@ namespace ICS4U_Monogame_4
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 
             _spriteBatch.Begin();
-
-            
-
-            _spriteBatch.Draw(frameTexture, frame, Color.Black);
-
-            _spriteBatch.Draw(frameTexture, frame, Color.Purple * 0.1f);
 
             foreach (Star star in stars)
             {
                 star.Draw(_spriteBatch, Color.White);
             }
 
+
             _spriteBatch.Draw(shipTexture, shipRect, Color.White);
+
+            _spriteBatch.Draw(frameTexture, frame, Color.White);
 
 
             
